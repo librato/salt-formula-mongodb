@@ -35,7 +35,7 @@ mongodb_packages:
   file.directory:
     - user: mongodb
     - group: mongodb
-    - mode: 770
+    - mode: 777
     - makedirs: true
 
 {{ server.logging.log_dir }}:
