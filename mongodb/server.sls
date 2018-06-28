@@ -26,14 +26,23 @@ mongodb_packages:
 
 {{ server.data_dir }}:
   file.directory:
+    - user: mongodb
+    - group: mongodb
+    - mode: 770
     - makedirs: true
 
 {{ server.lock_dir }}:
   file.directory:
+    - user: mongodb
+    - group: mongodb
+    - mode: 770
     - makedirs: true
 
 {{ server.logging.log_dir }}:
   file.directory:
+    - user: mongodb
+    - group: mongodb
+    - mode: 775
     - makedirs: true
 
 mongodb_service:
