@@ -41,7 +41,7 @@ mongodb_setup_cluster:
   - mode: 600
   - user: root
 
-{%- if not file.file_exists('{{ server.lock_dir }}/mongodb_password_changed') %}
+{%- if not salt['file'].file_exists('{{ server.lock_dir }}/mongodb_password_changed') %}
 mongodb_change_root_password:
   cmd.run:
   - name: 'mongo localhost:27017/admin /var/tmp/mongodb_user.js && touch {{ server.lock_dir }}/mongodb_password_changed'
@@ -66,7 +66,7 @@ mongodb_change_root_password:
       database_name: {{ database_name }}
       database_defs: {{ database }}
 
-{%- if not file.file_exists('{{ server.lock_dir }}/mongodb_user_{{ database_name }}_created') %}
+{%- if not salt['file'].file_exists('{{ server.lock_dir }}/mongodb_user_{{ database_name }}_created') %}
 mongodb_{{ database_name }}_fix_role:
   cmd.run:
   - name: 'mongo localhost:27017/admin -u admin -p {{ server.admin.password }} /var/tmp/mongodb_user_{{ database_name }}.js && touch {{ server.lock_dir }}/mongodb_user_{{ database_name }}_created'
