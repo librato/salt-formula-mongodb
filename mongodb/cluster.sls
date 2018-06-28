@@ -10,7 +10,7 @@ mongodb_service_running:
   - onlyif: /bin/false
   {%- endif %}
 
-{%- if server.members is defined and server.master == pillar.linux.system.name %}
+{%- if server.members is defined and server.get('is_master', False) %}
 
 /var/tmp/mongodb_cluster.js:
   file.managed:
@@ -31,7 +31,7 @@ mongodb_setup_cluster:
 
 {%- endif %}
 
-{%- if server.members is not defined or server.master == pillar.linux.system.name %}
+{%- if server.members is not defined or server.get('is_master', False) %}
 
 {%- if server.authorization.get('enabled', False) %}
 /var/tmp/mongodb_user.js:
