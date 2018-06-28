@@ -62,6 +62,7 @@ mongodb_change_root_password:
   - user: root
   - defaults:
       database_name: {{ database_name }}
+      database_defs: {{ database }}
 
 mongodb_{{ database_name }}_fix_role:
   cmd.run:
