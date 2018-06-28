@@ -21,6 +21,7 @@ mongodb_service_running:
   - require:
     - service: mongodb_service_running
 
+{%- if not salt['file'].file_exists('{{ server.lock_dir }}/mongodb_cluster_setup') %}
 mongodb_setup_cluster:
   cmd.run:
   - name: 'mongo localhost:27017 /var/tmp/mongodb_cluster.js && mongo localhost:27017 --quiet --eval "rs.conf()" | grep -i object -q'
@@ -28,6 +29,8 @@ mongodb_setup_cluster:
   - require:
     - service: mongodb_service_running
     - file: /var/tmp/mongodb_cluster.js
+  - creates: {{ server.lock_dir }}/mongodb_cluster_setup
+{%- endif %}
 
 {%- endif %}
 
