@@ -1,7 +1,7 @@
 {% set server = salt['grains.filter_by']({
     'Debian': {
         'version': 'stable',
-        'repo_component': 'main'
+        'repo_component': 'main',
         'pkgs': ['mongodb-server', 'mongodb', 'mongodb-clients'],
         'service': 'mongodb',
         'data_dir': "/var/lib/mongodb",
