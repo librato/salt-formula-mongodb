@@ -37,7 +37,6 @@ mongodb_repo:
     - gpgcheck: 1
     {%- endif %}
     - disabled: 0
-  {%- endif %}
 
 {%- endif %}
 
