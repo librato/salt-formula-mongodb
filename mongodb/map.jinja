@@ -3,7 +3,7 @@
         'version': 'stable',
         'repo_component': 'main',
         'pkgs': ['mongodb-org-server', 'mongodb-org', 'mongodb-org-tools', 'mongodb-org-shell'],
-        'service': 'mongodb',
+        'service': 'mongod',
         'data_dir': "/var/lib/mongodb",
         'lock_dir': "/var/lock/mongodb",
         'logging': {
@@ -20,7 +20,7 @@
     },
     'RedHat': {
         'version': 'stable',
-        'pkgs': ['mongodb-server', 'mongodb', 'mongodb-clients'],
+        'pkgs': ['mongodb-org-server', 'mongodb-org', 'mongodb-org-tools', 'mongodb-org-shell'],
         'service': 'mongod',
         'data_dir': "/var/lib/mongodb",
         'lock_dir': "/var/lock/mongodb",
