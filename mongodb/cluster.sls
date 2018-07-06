@@ -1,4 +1,4 @@
-{%- from "mongodb/map.jinja" import server with context %}
+{%- from "mongodb/map.jinja" import server, config with context %}
 
 {%- if server.get('enabled', False) %}
 
@@ -24,8 +24,8 @@ mongodb_service_running:
 {%- if not salt['file'].file_exists('{{ server.lock_dir }}/mongodb_cluster_setup') %}
 mongodb_setup_cluster:
   cmd.run:
-  - name: 'mongo localhost:27017 /var/tmp/mongodb_cluster.js && mongo localhost:27017 --quiet --eval "rs.conf()" | grep -i object -q'
-  - unless: 'mongo localhost:27017 --quiet --eval "rs.conf()" | grep -i object -q'
+  - name: 'mongo localhost:{{ config.net.port }} /var/tmp/mongodb_cluster.js && mongo localhost:{{ config.net.port }} --quiet --eval "rs.conf()" | grep -i object -q'
+  - unless: 'mongo localhost:{{ config.net.port }} --quiet --eval "rs.conf()" | grep -i object -q'
   - require:
     - service: mongodb_service_running
     - file: /var/tmp/mongodb_cluster.js
@@ -47,7 +47,7 @@ mongodb_setup_cluster:
 {%- if not salt['file'].file_exists('{{ server.lock_dir }}/mongodb_password_changed') %}
 mongodb_change_root_password:
   cmd.run:
-  - name: 'mongo localhost:27017/admin /var/tmp/mongodb_user.js && touch {{ server.lock_dir }}/mongodb_password_changed'
+  - name: 'mongo localhost:{{ config.net.port }}/admin /var/tmp/mongodb_user.js && touch {{ server.lock_dir }}/mongodb_password_changed'
   {%- if grains.get('noservices') %}
   - onlyif: /bin/false
   {%- endif %}
@@ -72,7 +72,7 @@ mongodb_change_root_password:
 {%- if not salt['file'].file_exists('{{ server.lock_dir }}/mongodb_user_{{ database_name }}_created') %}
 mongodb_{{ database_name }}_fix_role:
   cmd.run:
-  - name: 'mongo localhost:27017/admin -u admin -p {{ server.admin.password }} /var/tmp/mongodb_user_{{ database_name }}.js && touch {{ server.lock_dir }}/mongodb_user_{{ database_name }}_created'
+  - name: 'mongo localhost:{{ config.net.port }}/admin -u admin -p {{ server.admin.password }} /var/tmp/mongodb_user_{{ database_name }}.js && touch {{ server.lock_dir }}/mongodb_user_{{ database_name }}_created'
   {%- if grains.get('noservices') %}
   - onlyif: /bin/false
   {%- endif %}
