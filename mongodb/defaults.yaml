@@ -10,7 +10,7 @@ mongodb:
         enabled: true
     systemLog:
       destination: file
-      path: "/var/log/mongodb/mongod.key"
+      path: "/var/log/mongodb"
       logAppend: true
       timeStampFormat: iso8601-utc
     processManagement:
