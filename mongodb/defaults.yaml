@@ -1,0 +1,23 @@
+mongodb:
+  server:
+    service: mongod
+    lock_dir: "/var/lock/mongodb"
+  config:
+    storage:
+      dbPath: "/var/lib/mongodb"
+      directoryPerDB: true
+      journal:
+        enabled: true
+    systemLog:
+      destination: file
+      path: "/var/log/mongodb/mongod.key"
+      logAppend: true
+      timeStampFormat: iso8601-utc
+    processManagement:
+      fork: true
+    net:
+      bindIp: "127.0.0.1"
+      port: 27017
+    security:
+      keyFile: "/etc/mongod.key"
+      authorization: disabled

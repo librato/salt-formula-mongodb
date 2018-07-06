@@ -1,39 +1,13 @@
+{% import_yaml "mongodb/defaults.yaml" as defaults %}
+
 {% set server = salt['grains.filter_by']({
     'Debian': {
         'version': 'stable',
         'repo_component': 'main',
-        'pkgs': ['mongodb-org-server', 'mongodb-org', 'mongodb-org-tools', 'mongodb-org-shell'],
-        'service': 'mongod',
-        'data_dir': "/var/lib/mongodb",
-        'lock_dir': "/var/lock/mongodb",
-        'logging': {
-          'log_dir': "/var/log/mongodb",
-        },
-        'bind': {
-          'address': '127.0.0.1',
-          'port': 27017
-        },
-        'authorization': {},
-        'admin': {
-          'username': 'root'
-        }
+        'pkgs': ['mongodb-org-server', 'mongodb-org', 'mongodb-org-tools', 'mongodb-org-shell']
     },
     'RedHat': {
         'version': 'stable',
-        'pkgs': ['mongodb-org-server', 'mongodb-org', 'mongodb-org-tools', 'mongodb-org-shell'],
-        'service': 'mongod',
-        'data_dir': "/var/lib/mongodb",
-        'lock_dir': "/var/lock/mongodb",
-        'logging': {
-          'log_dir': "/var/log/mongodb",
-        },
-        'bind': {
-          'address': '127.0.0.1',
-          'port': 27017
-        },
-        'authorization': {},
-        'admin': {
-          'username': 'root'
-        }
+        'pkgs': ['mongodb-org-server', 'mongodb-org', 'mongodb-org-tools', 'mongodb-org-shell']
     },
 }, merge=salt['pillar.get']('mongodb:server')) %}

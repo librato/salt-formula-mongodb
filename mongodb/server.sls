@@ -44,7 +44,7 @@ mongodb_packages:
   pkg.installed:
   - names: {{ server.pkgs }}
 
-/etc/mongodb.conf:
+/etc/{{ server.service }}.conf:
   file.managed:
   - source: salt://mongodb/files/mongodb.conf
   - template: jinja
@@ -52,7 +52,7 @@ mongodb_packages:
     - pkg: mongodb_packages
 
 {%- if server.shared_key is defined %}
-/etc/mongodb.key:
+/etc/{{ server.service }}.key:
   file.managed:
   - contents_pillar: mongodb:server:shared_key
   - mode: 600
@@ -95,6 +95,6 @@ mongodb_service:
     - file: {{ server.lock_dir }}
     - pkg: mongodb_packages
   - watch:
-    - file: /etc/mongodb.conf
+    - file: /etc/{{ server.service }}.conf
 
 {%- endif %}
