@@ -34,10 +34,10 @@ mongodb_setup_cluster:
 
 {%- if server.members is not defined or server.get('is_master', False) %}
 
-{%- if server.authorization.get('enabled', False) %}
+{%- if config.security.get('authorization', 'disabled') === 'enabled' %}
 /var/tmp/mongodb_user.js:
   file.managed:
-  - source: salt://mongodb/files/user.js
+  - source: salt://mongodb/files/admin_user.js
   - template: jinja
   - mode: 600
   - user: root

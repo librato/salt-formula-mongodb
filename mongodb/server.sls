@@ -1,4 +1,4 @@
-{%- from "mongodb/map.jinja" import server with context %}
+{%- from "mongodb/map.jinja" import server, config with context %}
 
 {%- if grains['os_family'] == 'Debian' %}
 
@@ -61,7 +61,7 @@ mongodb_packages:
     - service: mongodb_service
 {%- endif %}
 
-{{ server.data_dir }}:
+{{ config.storage.dbPath }}:
   file.directory:
     - user: mongodb
     - group: mongodb
@@ -75,7 +75,7 @@ mongodb_packages:
     - mode: 777
     - makedirs: true
 
-{{ server.logging.log_dir }}:
+{{ config.systemLog.path }}:
   file.directory:
     - user: mongodb
     - group: mongodb

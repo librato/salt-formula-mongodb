@@ -1,6 +1,11 @@
-{% import_yaml "mongodb/defaults.yaml" as defaults %}
+{# Start with  defaults from defaults.yml #}
+{% import_yaml "mongodb/defaults.yaml" as default_settings %}
 
-{% set server = salt['grains.filter_by']({
+{#
+Setup variable using grains['os_family'] based logic, only add key:values here
+that differ from whats in defaults.yml
+#}
+{% set os_family_map = salt['grains.filter_by']({
     'Debian': {
         'version': 'stable',
         'repo_component': 'main',
@@ -10,6 +15,22 @@
         'version': 'stable',
         'pkgs': ['mongodb-org-server', 'mongodb-org', 'mongodb-org-tools', 'mongodb-org-shell']
     },
-}, merge=defaults.mongodb.server) %}
+  }
+  , grain="os_family"
+  , merge=salt['pillar.get']('mongodb:lookup'))
+%}
 
-{% set config = defaults.mongodb.config %}
+{# Merge the flavor_map to the default settings #}
+{% do default_settings.mongodb.server.update(os_family_map) %}
+
+{# Merge in template:lookup pillar #}
+{% set server = salt['pillar.get'](
+        'mongodb:server',
+        default=default_settings.mongodb.server,
+        merge=True)
+%}
+{% set config = salt['pillar.get'](
+        'mongodb:config',
+        default=default_settings.mongodb.config,
+        merge=True)
+%}
