@@ -34,7 +34,7 @@ mongodb_setup_cluster:
 
 {%- if server.members is not defined or server.get('is_master', False) %}
 
-{%- if config.security.get('authorization', 'disabled') === 'enabled' %}
+{%- if config.security.get('authorization', 'disabled') == 'enabled' %}
 /var/tmp/mongodb_user.js:
   file.managed:
   - source: salt://mongodb/files/admin_user.js
