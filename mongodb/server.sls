@@ -75,7 +75,7 @@ mongodb_packages:
     - mode: 777
     - makedirs: true
 
-{{ config.systemLog.path }}:
+{{ salt['file.dirname']({{ config.systemLog.path }}) }}:
   file.directory:
     - user: mongodb
     - group: mongodb
