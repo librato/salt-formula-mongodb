@@ -10,4 +10,6 @@
         'version': 'stable',
         'pkgs': ['mongodb-org-server', 'mongodb-org', 'mongodb-org-tools', 'mongodb-org-shell']
     },
-}, merge=salt['pillar.get']('mongodb:server')) %}
+}, merge=defaults.mongodb.server) %}
+
+{% set config = defaults.mongodb.config %}
