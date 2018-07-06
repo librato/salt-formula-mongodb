@@ -1,7 +1,5 @@
 {%- from "mongodb/map.jinja" import server with context %}
 
-{%- if server.get('enabled', False) %}
-
 {%- if grains['os_family'] == 'Debian' %}
 
 {%- set os   = salt['grains.get']('os') | lower() %}
@@ -96,5 +94,3 @@ mongodb_service:
     - pkg: mongodb_packages
   - watch:
     - file: /etc/{{ server.service }}.conf
-
-{%- endif %}

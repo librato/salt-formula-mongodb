@@ -1,7 +1,5 @@
 {%- from "mongodb/map.jinja" import server, config with context %}
 
-{%- if server.get('enabled', False) %}
-
 mongodb_service_running:
   service.running:
   - name: {{ server.service }}
@@ -87,8 +85,6 @@ mongodb_{{ database_name }}_fix_role:
 {% endif %}
 
 {%- endfor %}
-
-{%- endif %}
 
 {%- endif %}
 
