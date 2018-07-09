@@ -8,7 +8,7 @@ mongodb_service_running:
   - onlyif: /bin/false
   {%- endif %}
 
-{%- if server.members is defined and server.get('is_master', False) %}
+{%- if server.members is defined %}
 
 /var/tmp/mongodb_cluster.js:
   file.managed:
