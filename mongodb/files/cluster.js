@@ -13,4 +13,4 @@ rs.initiate({
         {%- endfor %}
     ]
 });
-rs.conf();
+rs.status();
