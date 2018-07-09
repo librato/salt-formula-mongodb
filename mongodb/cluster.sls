@@ -45,7 +45,7 @@ mongodb_setup_cluster:
 
 mongodb_fix_role:
   cmd.run:
-  - name: 'mongo localhost:{{ config.net.port }} /var/tmp/mongodb_users.js && touch {{ server.lock_dir }}/mongodb_user_{{ database_name }}_created'
+  - name: 'mongo localhost:{{ config.net.port }} /var/tmp/mongodb_users.js && touch {{ server.lock_dir }}/mongodb_users_created'
   - unless: 'stat {{ server.lock_dir }}/mongodb_users_created > /dev/null 2>&1'
   {%- if grains.get('noservices') %}
   - onlyif: /bin/false
