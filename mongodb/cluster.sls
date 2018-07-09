@@ -32,28 +32,7 @@ mongodb_setup_cluster:
 
 {%- endif %}
 
-{%- if server.members is not defined or server.get('is_master', False) %}
-
 {%- if config.security.get('authorization', 'disabled') == 'enabled' %}
-/var/tmp/mongodb_user.js:
-  file.managed:
-  - source: salt://mongodb/files/admin_user.js
-  - template: jinja
-  - mode: 600
-  - user: root
-
-{%- if not salt['file'].file_exists('{{ server.lock_dir }}/mongodb_password_changed') %}
-mongodb_change_root_password:
-  cmd.run:
-  - name: 'mongo localhost:{{ config.net.port }}/admin /var/tmp/mongodb_user.js && touch {{ server.lock_dir }}/mongodb_password_changed'
-  {%- if grains.get('noservices') %}
-  - onlyif: /bin/false
-  {%- endif %}
-  - require:
-    - file: /var/tmp/mongodb_user.js
-    - service: mongodb_service_running
-  - creates: {{ server.lock_dir }}/mongodb_password_changed
-{% endif %}
 
 {%- for database_name, database in server.get('database', {}).iteritems() %}
 
@@ -67,10 +46,10 @@ mongodb_change_root_password:
       database_name: {{ database_name }}
       database_defs: {{ database }}
 
-{%- if not salt['file'].file_exists('{{ server.lock_dir }}/mongodb_user_{{ database_name }}_created') %}
 mongodb_{{ database_name }}_fix_role:
   cmd.run:
-  - name: 'mongo localhost:{{ config.net.port }}/admin -u admin -p {{ server.admin.password }} /var/tmp/mongodb_user_{{ database_name }}.js && touch {{ server.lock_dir }}/mongodb_user_{{ database_name }}_created'
+  - name: 'mongo localhost:{{ config.net.port }} /var/tmp/mongodb_user_{{ database_name }}.js && touch {{ server.lock_dir }}/mongodb_user_{{ database_name }}_created'
+  - unless: 'stat {{ server.lock_dir }}/mongodb_user_{{ database_name }}_created > /dev/null 2>&1'
   {%- if grains.get('noservices') %}
   - onlyif: /bin/false
   {%- endif %}
@@ -82,10 +61,7 @@ mongodb_{{ database_name }}_fix_role:
   require:
     - cmd: mongodb_setup_cluster
   {%- endif %}
-{% endif %}
 
 {%- endfor %}
-
-{%- endif %}
 
 {%- endif %}
