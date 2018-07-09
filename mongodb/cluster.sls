@@ -34,34 +34,29 @@ mongodb_setup_cluster:
 
 {%- if config.security.get('authorization', 'disabled') == 'enabled' %}
 
-{%- for database_name, database in server.get('database', {}).iteritems() %}
-
-/var/tmp/mongodb_user_{{ database_name }}.js:
+/var/tmp/mongodb_users.js:
   file.managed:
   - source: salt://mongodb/files/user_role.js
   - template: jinja
   - mode: 600
   - user: root
   - defaults:
-      database_name: {{ database_name }}
-      database_defs: {{ database }}
+      database: {{ database }}
 
-mongodb_{{ database_name }}_fix_role:
+mongodb_fix_role:
   cmd.run:
-  - name: 'mongo localhost:{{ config.net.port }} /var/tmp/mongodb_user_{{ database_name }}.js && touch {{ server.lock_dir }}/mongodb_user_{{ database_name }}_created'
-  - unless: 'stat {{ server.lock_dir }}/mongodb_user_{{ database_name }}_created > /dev/null 2>&1'
+  - name: 'mongo localhost:{{ config.net.port }} /var/tmp/mongodb_users.js && touch {{ server.lock_dir }}/mongodb_user_{{ database_name }}_created'
+  - unless: 'stat {{ server.lock_dir }}/mongodb_users_created > /dev/null 2>&1'
   {%- if grains.get('noservices') %}
   - onlyif: /bin/false
   {%- endif %}
   - require:
-    - file: /var/tmp/mongodb_user_{{ database_name }}.js
+    - file: /var/tmp/mongodb_users.js
     - service: mongodb_service_running
-  - creates: {{ server.lock_dir }}/mongodb_user_{{ database_name }}_created
+  - creates: {{ server.lock_dir }}/mongodb_users_created
   {%- if server.members is defined %}
   require:
     - cmd: mongodb_setup_cluster
   {%- endif %}
-
-{%- endfor %}
 
 {%- endif %}
