@@ -22,7 +22,7 @@ mongodb_service_running:
 {%- if not salt['file'].file_exists('{{ server.lock_dir }}/mongodb_cluster_setup') %}
 mongodb_setup_cluster:
   cmd.run:
-  - name: 'mongo localhost:{{ config.net.port }} /var/tmp/mongodb_cluster.js && mongo localhost:{{ config.net.port }} --quiet --eval "rs.status()" | grep -i object -q'
+  - name: 'mongo localhost:{{ config.net.port }} /var/tmp/mongodb_cluster.js && mongo localhost:{{ config.net.port }} --quiet --eval "rs.status()" | grep -i members -q'
   - unless: 'mongo localhost:{{ config.net.port }} --quiet --eval "rs.status()" | grep -i members -q'
   - require:
     - service: mongodb_service_running
