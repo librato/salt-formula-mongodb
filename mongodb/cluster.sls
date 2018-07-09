@@ -41,7 +41,7 @@ mongodb_setup_cluster:
   - mode: 600
   - user: root
   - defaults:
-      database: {{ database }}
+      database: {{ server.get('database', {}) }}
 
 mongodb_fix_role:
   cmd.run:
