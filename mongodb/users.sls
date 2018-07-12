@@ -1,5 +1,13 @@
 {%- from "mongodb/map.jinja" import server, config with context %}
 
+mongodb_service_running:
+  service.running:
+  - name: {{ server.service }}
+  - enable: true
+  {%- if grains.get('noservices') %}
+  - onlyif: /bin/false
+  {%- endif %}
+
 {%- if config.security.get('authorization', 'disabled') == 'enabled' %}
 
 /var/tmp/mongodb_users.js:
