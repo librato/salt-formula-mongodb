@@ -42,6 +42,13 @@ mongodb_packages:
   pkg.installed:
   - names: {{ server.pkgs }}
 
+misc-packages:
+  pkg.installed:
+    - names:
+      python-boto
+      pymongo
+      jq
+
 /etc/{{ server.service }}.conf:
   file.managed:
   - source: salt://mongodb/files/mongodb.conf
