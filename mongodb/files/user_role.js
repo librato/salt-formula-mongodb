@@ -3,7 +3,7 @@
 {%- set admin = server.get('admin', {}) %}
 
 dbh = db.getSiblingDB("admin");
-dbh.createUser({ user: "{{ admin['name'] }}", pwd: "{{ admin['password'] }}", roles: {{ admin['roles'] | json }} });
+dbh.createUser({ user: "{{ admin.get('name', 'admin') }}", pwd: "{{ admin['password'] }}", roles: ['root'] });
 dbh.auth("{{ admin['name'] }}", "{{ admin['password'] }}");
 
 {%- for database_name, database_defs in database.iteritems() %}
