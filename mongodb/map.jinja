@@ -9,11 +9,13 @@ that differ from whats in defaults.yml
     'Debian': {
         'version': 'stable',
         'repo_component': 'main',
-        'pkgs': ['mongodb-org-server', 'mongodb-org', 'mongodb-org-tools', 'mongodb-org-shell']
+        'pkgs': ['mongodb-org-server', 'mongodb-org', 'mongodb-org-tools', 'mongodb-org-shell'],
+        'misc_pkgs': ['python-pymongo', 'python-boto3', 'jq']
     },
     'RedHat': {
         'version': 'stable',
-        'pkgs': ['mongodb-org-server', 'mongodb-org', 'mongodb-org-tools', 'mongodb-org-shell']
+        'pkgs': ['mongodb-org-server', 'mongodb-org', 'mongodb-org-tools', 'mongodb-org-shell'],
+        'misc_pkgs': ['python-pymongo', 'python-boto3', 'jq']
     },
   }
   , grain="os_family"

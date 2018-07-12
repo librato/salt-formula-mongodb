@@ -44,10 +44,7 @@ mongodb_packages:
 
 misc-packages:
   pkg.installed:
-    - names:
-      python-boto
-      pymongo
-      jq
+    - names: {{ server.misc_pkgs }}
 
 /etc/{{ server.service }}.conf:
   file.managed:
