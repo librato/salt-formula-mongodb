@@ -21,7 +21,7 @@ mongodb_service_running:
 
 mongodb_setup_cluster:
   cmd.run:
-  - name: 'mongo localhost:{{ config.net.port }} /var/tmp/mongodb_cluster.js && mongo localhost:{{ config.net.port }} --quiet --eval "rs.status()" | grep -i members -q'
+  - name: 'mongo localhost:{{ config.net.port }} /var/tmp/mongodb_cluster.js && mongo localhost:{{ config.net.port }} --quiet --eval "rs.status()" > {{ server.lock_dir }}/mongodb_cluster_setup'
   - unless: 'stat {{ server.lock_dir }}/mongodb_cluster_setup > /dev/null 2>&1'
   - require:
     - service: mongodb_service_running
