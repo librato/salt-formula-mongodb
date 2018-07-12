@@ -1,3 +1,5 @@
+{%- from "mongodb/map.jinja" import server, config with context %}
+
 {%- if config.security.get('authorization', 'disabled') == 'enabled' %}
 
 /var/tmp/mongodb_users.js:
