@@ -22,9 +22,5 @@ mongodb_fix_role:
     - file: /var/tmp/mongodb_users.js
     - service: mongodb_service_running
   - creates: {{ server.lock_dir }}/mongodb_users_created
-  {%- if server.members is defined %}
-  require:
-    - cmd: mongodb_setup_cluster
-  {%- endif %}
 
 {%- endif %}
