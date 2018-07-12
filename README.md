@@ -35,9 +35,6 @@ Setup a MongoDB cluster
 ``` {.sourceCode .yaml}
 mongodb:
   server:
-    admin:
-      user: admin
-      password: magicunicorn
     members:
       - host: 192.168.1.11
         priority: 2
@@ -48,16 +45,16 @@ mongodb:
       bEoUQ4QKB8RsJt1cBnO8/2fni3CG+/L2CrGQ+RNJuA5cpIoeehHmWG1ir5mTUx9N
       OLLDvtHT6423395tmGBAJAISv5LXY8PNB6/m1LxsfEDEfjlLwo62z2pMG94ZBPX6
       pGy5YRlii77fi9l5/+d/ULFQSFy6uq5Py0qeFF1IsYsmeSP8GrCExw/9oxWj+Tmv
-      qHcmRtm1EdaTKpAS2O07NMZTUxTO3SkaXzLZZF1QmflROcZq3ZteuM4jKBtOjKIt
+      qHcmRtm1Edaiokmlwroigbjoiq3kvmbti4+d9jpewoikllfggfteuM4jKBtOjKIt
       MlkkJ0rcIcahTw6x+iWQNDdip5uLS2Xc7i77ZMC4RZmeYVwQ16QtwNdNsTcnoeFC
       FfNIUXCckbZikhyUWlRUZd7NQ6YnQLGKi1Bs0YV0QLmocHFssiB9wnsNynMSgd4i
       zJ/joOlrqmIAmF8BJsa1D+szA4cHc0roWRiCfXvkVjL5fsPNXQpqu0ghPJXigoHJ
-      7//HVsmNzX+Tb2hrHdHE+fnQgVmOgPbUPaPqTqwv9lfDeZj7kwn6pwrHZpcVLoTi
+      7//HVsmNzX+Tb2hrHdHE+fsdgsagergerfgv43590vsdeZj7kwn6pwrHZpcVLoTi
       ynv7Obl1dHJptRBXqEGBoYcJ2gDNBzuAN9QDpgueVn89s1x/LhHItItBRAwwlsMA
       T++Imel/9qA68kCSzjoj1GZw7CKAAoi9lZSKy5xVzo03K5ZYfaHdPFFG9wqncfH6
       tONxYHv1faQosjPJGQFcwPRqFYzPNzlIOnWYbFUwTJAvXGRcWui/XjpsjAwO7Ba/
       /7hDvlCBgAeor3dPo1d47eCH8ZjCc1pwd8v0fj2q3FvUTEJUsIjH4y3smlzZWR27
-      Xx6lINe/i+OhwWH8538U4MWku52lbLn2G3pta7TJpVeVoZcNjs9tYWWeMjOmrcJH
+      Xx6lINe/i+OhwWHdfg5g354grqeroigger09mkopgepokko4r09tYWWeMjOmrcJH
       tPSe9zc5i+ZbD17npXRTlngaTP5ANKo6PlT2r2tzV06iYaSLyqVPoBA6evHwggcY
       AVw1v99wilvOisIP0n5QgTxpTLA8JHr3Erq7CCDDc+uUbrp0gAf+WATrM5HSNd2M
       YIaOzbYo5Mp71ofF8Xem/ce8GoCCypdWzvrT1DJMDxyt48DF
@@ -68,6 +65,10 @@ In order to setup a cluster, the `mongodb.cluster` state needs to be run after a
 To check cluster status, execute following on the cluster primary:
 
 ``` {.sourceCode .bash}
+# Without Authentication
+mongo 127.0.0.1:27017/admin --eval "rs.status()"
+
+# With Authentication
 mongo 127.0.0.1:27017/admin -u <admin-user> -p <admin-password> --eval "rs.status()"
 ```
 
