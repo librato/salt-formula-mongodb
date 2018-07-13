@@ -1,11 +1,52 @@
-{%- from "mongodb/map.jinja" import server with context %}
+{%- from "mongodb/map.jinja" import server, config with context %}
 
-{%- if server.get('enabled', False) %}
+{%- if grains['os_family'] == 'Debian' %}
+
+{%- set os   = salt['grains.get']('os') | lower() %}
+{%- set code = salt['grains.get']('oscodename') %}
+mongodb_repo:
+  pkgrepo.managed:
+    - humanname: MongoDB.org Repository
+    - name: deb http://repo.mongodb.org/apt/{{ os }} {{ code }}/mongodb-org/{{ server.version }} {{ server.repo_component }}
+    - file: /etc/apt/sources.list.d/mongodb-org.list
+    - keyid: {{ server.keyid }}
+    - keyserver: keyserver.ubuntu.com
+
+{%- elif grains['os_family'] == 'RedHat' %}
+
+mongodb_repo:
+  pkgrepo.managed:
+    {%- if server.version == 'stable' %}
+    - name: mongodb-org
+    - humanname: MongoDB.org Repository
+    - gpgkey: https://www.mongodb.org/static/pgp/server-3.2.asc
+    - baseurl: https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/{{ server.version }}/$basearch/
+    - gpgcheck: 1
+    {%- elif server.version == 'oldstable' %}
+    - name: mongodb-org-{{ server.version }}
+    - humanname: MongoDB oldstable Repository
+    - baseurl: http://downloads-distro.mongodb.org/repo/redhat/os/$basearch/
+    - gpgcheck: 0
+    {%- else %}
+    - name: mongodb-org-{{ server.version }}
+    - humanname: MongoDB {{ server.version | capitalize() }} Repository
+    - gpgkey: https://www.mongodb.org/static/pgp/server-{{ server.version }}.asc
+    - baseurl: https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/{{ server.version }}/$basearch/
+    - gpgcheck: 1
+    {%- endif %}
+    - disabled: 0
+
+{%- endif %}
+
 mongodb_packages:
   pkg.installed:
   - names: {{ server.pkgs }}
 
-/etc/mongodb.conf:
+misc-packages:
+  pkg.installed:
+    - names: {{ server.misc_pkgs }}
+
+/etc/{{ server.service }}.conf:
   file.managed:
   - source: salt://mongodb/files/mongodb.conf
   - template: jinja
@@ -13,7 +54,7 @@ mongodb_packages:
     - pkg: mongodb_packages
 
 {%- if server.shared_key is defined %}
-/etc/mongodb.key:
+/etc/{{ server.service }}.key:
   file.managed:
   - contents_pillar: mongodb:server:shared_key
   - mode: 600
@@ -24,7 +65,7 @@ mongodb_packages:
     - service: mongodb_service
 {%- endif %}
 
-{{ server.data_dir }}:
+{{ config.storage.dbPath }}:
   file.directory:
     - user: mongodb
     - group: mongodb
@@ -38,7 +79,7 @@ mongodb_packages:
     - mode: 777
     - makedirs: true
 
-{{ server.logging.log_dir }}:
+{{ salt['file.dirname'](config.systemLog.path) }}:
   file.directory:
     - user: mongodb
     - group: mongodb
@@ -56,6 +97,4 @@ mongodb_service:
     - file: {{ server.lock_dir }}
     - pkg: mongodb_packages
   - watch:
-    - file: /etc/mongodb.conf
-
-{%- endif %}
+    - file: /etc/{{ server.service }}.conf

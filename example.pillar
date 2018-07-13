@@ -1,0 +1,20 @@
+mongodb:
+  config:
+    net:
+      bindIp: "0.0.0.0"
+      port: 27017
+  server:
+    version: 3.6
+    keyid: 2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5
+    repo_component: multiverse
+    admin:
+      user: admin
+      password: magicunicorn
+    database:
+      dbname:
+        enabled: true
+        encoding: 'utf8'
+        users:
+        - name: 'username'
+          password: 'password'
+          roles: ['dbAdmin']
