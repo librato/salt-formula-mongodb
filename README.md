@@ -2,6 +2,15 @@
 
 MongoDB (from \"humongous\") is an open-source document database, and the leading NoSQL database. Written in C++.
 
+## Installation
+
+After calling this, the following states will want to be ran on the primary mongodb node:
+
+```bash
+sudo salt-call state.sls mongodb.cluster
+sudo salt-call state.sls mongodb.users
+```
+
 ## Available states
 
 ### `mongodb.server`
